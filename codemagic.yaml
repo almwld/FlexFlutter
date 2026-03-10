@@ -6,7 +6,32 @@ workflows:
     environment:
       flutter: stable
     scripts:
-      - flutter packages pub get
-      - flutter build apk --release
+      - name: Create Flutter project structure
+        script: |
+          # حفظ الكود
+          mkdir -p /tmp/my_code
+          cp -r lib /tmp/my_code/
+          cp pubspec.yaml /tmp/my_code/
+          cp -r assets /tmp/my_code/ 2>/dev/null || true
+          
+          # إنشاء مشروع جديد
+          cd /tmp
+          flutter create flex_yemen_new --org com.flexyemen
+          
+          # نقل الكود
+          cp -r /tmp/my_code/lib/* /tmp/flex_yemen_new/lib/
+          cp /tmp/my_code/pubspec.yaml /tmp/flex_yemen_new/
+          cp -r /tmp/my_code/assets /tmp/flex_yemen_new/ 2>/dev/null || true
+          
+          # استبدال المشروع
+          rm -rf $CM_BUILD_DIR/*
+          cp -r /tmp/flex_yemen_new/* $CM_BUILD_DIR/
+      
+      - name: Get dependencies
+        script: flutter pub get
+      
+      - name: Build APK
+        script: flutter build apk --release
+    
     artifacts:
       - build/**/outputs/**/*.apk
