@@ -16,31 +16,7 @@ workflows:
           flutter create flex_yemen_new --org com.flexyemen
           
           cp -r /tmp/my_code/lib/* /tmp/flex_yemen_new/lib/
-          
-          # تعديل pubspec.yaml لإزالة الأصول المفقودة
-          cat > /tmp/flex_yemen_new/pubspec.yaml << 'PUBSPEC'
-name: flex_yemen
-description: تطبيق فلكس يمن
-publish_to: 'none'
-version: 1.0.0+1
-
-environment:
-  sdk: '>=3.0.0 <4.0.0'
-
-dependencies:
-  flutter:
-    sdk: flutter
-  cupertino_icons: ^1.0.6
-  flutter_svg: ^2.0.10+1
-
-dev_dependencies:
-  flutter_test:
-    sdk: flutter
-  flutter_lints: ^3.0.0
-
-flutter:
-  uses-material-design: true
-PUBSPEC
+          cp /tmp/my_code/pubspec.yaml /tmp/flex_yemen_new/
           
           rm -rf $CM_BUILD_DIR/*
           cp -r /tmp/flex_yemen_new/* $CM_BUILD_DIR/
