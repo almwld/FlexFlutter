@@ -3,8 +3,6 @@ name: Flutter CI/CD
 on:
   push:
     branches: [ main, master ]
-  pull_request:
-    branches: [ main, master ]
 
 jobs:
   build-android:
@@ -17,6 +15,23 @@ jobs:
         with:
           flutter-version: '3.19.0'
           channel: 'stable'
+      
+      - name: Create Flutter project structure
+        run: |
+          # نقل الكود لمؤقت
+          mkdir -p temp_lib
+          cp -r lib/* temp_lib/ 2>/dev/null || true
+          cp pubspec.yaml temp_lib/ 2>/dev/null || true
+          
+          # إنشاء مشروع جديد
+          flutter create . --org com.flexyemen --project-name flex_yemen --overwrite
+          
+          # إعادة الكود
+          cp -r temp_lib/lib/* lib/ 2>/dev/null || true
+          cp temp_lib/pubspec.yaml . 2>/dev/null || true
+          
+          # تنظيف
+          rm -rf temp_lib
       
       - name: Get dependencies
         run: flutter pub get
