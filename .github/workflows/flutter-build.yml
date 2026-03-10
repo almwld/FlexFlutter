@@ -18,22 +18,39 @@ jobs:
       
       - name: Create proper Flutter project
         run: |
-          # حفظ الكود الحالي
           mkdir -p /tmp/saved_code
           cp -r lib /tmp/saved_code/ 2>/dev/null || true
-          cp pubspec.yaml /tmp/saved_code/ 2>/dev/null || true
-          cp -r assets /tmp/saved_code/ 2>/dev/null || true
           
-          # إنشاء مشروع جديد
           cd /tmp
           flutter create flex_yemen --org com.flexyemen
           
-          # استعادة الكود
           cp -r /tmp/saved_code/lib/* /tmp/flex_yemen/lib/ 2>/dev/null || true
-          cp /tmp/saved_code/pubspec.yaml /tmp/flex_yemen/ 2>/dev/null || true
-          cp -r /tmp/saved_code/assets /tmp/flex_yemen/ 2>/dev/null || true
           
-          # استبدال المشروع
+          # pubspec.yaml بدون أصول مفقودة
+          cat > /tmp/flex_yemen/pubspec.yaml << 'PUBSPEC'
+name: flex_yemen
+description: تطبيق فلكس يمن - السوق الإلكتروني اليمني
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.6
+  flutter_svg: ^2.0.10+1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+
+flutter:
+  uses-material-design: true
+PUBSPEC
+          
           rm -rf $GITHUB_WORKSPACE/*
           cp -r /tmp/flex_yemen/* $GITHUB_WORKSPACE/
       
@@ -43,27 +60,8 @@ jobs:
       - name: Build APK
         run: flutter build apk --release
       
-      - name: Build AppBundle
-        run: flutter build appbundle --release
-      
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: release-apk
           path: build/app/outputs/flutter-apk/app-release.apk
-      
-      - name: Upload AAB
-        uses: actions/upload-artifact@v4
-        with:
-          name: release-aab
-          path: build/app/outputs/bundle/release/app-release.aab
-      
-      - name: Create Release
-        uses: softprops/action-gh-release@v1
-        if: startsWith(github.ref, 'refs/tags/')
-        with:
-          files: |
-            build/app/outputs/flutter-apk/app-release.apk
-            build/app/outputs/bundle/release/app-release.aab
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
