@@ -15,7 +15,48 @@ workflows:
           cd /tmp
           flutter create flex_yemen_new --org com.flexyemen
           
-          cp -r /tmp/my_code/lib/* /tmp/flex_yemen_new/lib/
+          # إنشاء app_theme.dart أولاً
+          mkdir -p /tmp/flex_yemen_new/lib/theme
+          printf '%s\n' \
+            "import 'package:flutter/material.dart';" \
+            "import 'package:flutter/services.dart';" \
+            "" \
+            "class AppTheme {" \
+            "  static const Color goldColor = Color(0xFFD4AF37);" \
+            "  static const Color darkBackground = Color(0xFF121212);" \
+            "  static const Color cardDark = Color(0xFF1A1A1A);" \
+            "" \
+            "  static ThemeData get lightTheme => ThemeData(" \
+            "    fontFamily: 'Cairo'," \
+            "    brightness: Brightness.light," \
+            "    primaryColor: goldColor," \
+            "    scaffoldBackgroundColor: Colors.white," \
+            "    useMaterial3: true," \
+            "    appBarTheme: const AppBarTheme(" \
+            "      elevation: 0," \
+            "      backgroundColor: Colors.transparent," \
+            "      systemOverlayStyle: SystemUiOverlayStyle.dark," \
+            "    )," \
+            "  );" \
+            "" \
+            "  static ThemeData get darkTheme => ThemeData(" \
+            "    fontFamily: 'Cairo'," \
+            "    brightness: Brightness.dark," \
+            "    primaryColor: goldColor," \
+            "    scaffoldBackgroundColor: darkBackground," \
+            "    useMaterial3: true," \
+            "    appBarTheme: const AppBarTheme(" \
+            "      elevation: 0," \
+            "      backgroundColor: Colors.transparent," \
+            "      systemOverlayStyle: SystemUiOverlayStyle.light," \
+            "    )," \
+            "  );" \
+            "}" > /tmp/flex_yemen_new/lib/theme/app_theme.dart
+          
+          # نسخ الباقي
+          cp -r /tmp/my_code/lib/navigation /tmp/flex_yemen_new/lib/ 2>/dev/null || true
+          cp -r /tmp/my_code/lib/screens /tmp/flex_yemen_new/lib/ 2>/dev/null || true
+          cp -r /tmp/my_code/lib/widgets /tmp/flex_yemen_new/lib/ 2>/dev/null || true
           cp /tmp/my_code/pubspec.yaml /tmp/flex_yemen_new/
           
           rm -rf $CM_BUILD_DIR/*
