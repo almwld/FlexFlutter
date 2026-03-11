@@ -37,7 +37,7 @@ class _WalletScreenState extends State<WalletScreen> {
     {'name': 'سحب نقدي', 'icon': Icons.atm, 'color': Colors.blue},
     {'name': 'دفع المشتريات', 'icon': Icons.shopping_bag, 'color': Colors.purple},
     {'name': 'شراء اونلاين', 'icon': Icons.language, 'color': Colors.teal},
-    {'name': 'جيبي', 'icon': Icons.account_wallet, 'color': Colors.pink},
+    {'name': 'جيبي', 'icon': Icons.wallet, 'color': Colors.pink},
     {'name': 'خدمات ترفيه', 'icon': Icons.games, 'color': Colors.indigo},
     {'name': 'المدفوعات', 'icon': Icons.payments, 'color': Colors.amber},
   ];
@@ -46,7 +46,7 @@ class _WalletScreenState extends State<WalletScreen> {
     {'name': 'تحويل إلى أحمد', 'amount': -500, 'date': 'اليوم', 'icon': Icons.send},
     {'name': 'إيداع نقدي', 'amount': 5000, 'date': 'أمس', 'icon': Icons.add},
     {'name': 'شراء من متجر', 'amount': -1200, 'date': 'أمس', 'icon': Icons.shopping_cart},
-    {'name': 'استلام تحويل', 'amount': 10000, 'date': '22/03', 'icon': Icons.received},
+    {'name': 'استلام تحويل', 'amount': 10000, 'date': '22/03', 'icon': Icons.arrow_downward},
   ];
 
   @override
