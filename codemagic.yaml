@@ -15,45 +15,52 @@ workflows:
           cd /tmp
           flutter create flex_yemen_new --org com.flexyemen
           
-          # إنشاء app_theme.dart أولاً
-          mkdir -p /tmp/flex_yemen_new/lib/theme
+          # إنشاء main.dart
           printf '%s\n' \
             "import 'package:flutter/material.dart';" \
-            "import 'package:flutter/services.dart';" \
+            "import 'app.dart';" \
             "" \
-            "class AppTheme {" \
-            "  static const Color goldColor = Color(0xFFD4AF37);" \
-            "  static const Color darkBackground = Color(0xFF121212);" \
-            "  static const Color cardDark = Color(0xFF1A1A1A);" \
-            "" \
-            "  static ThemeData get lightTheme => ThemeData(" \
-            "    fontFamily: 'Cairo'," \
-            "    brightness: Brightness.light," \
-            "    primaryColor: goldColor," \
-            "    scaffoldBackgroundColor: Colors.white," \
-            "    useMaterial3: true," \
-            "    appBarTheme: const AppBarTheme(" \
-            "      elevation: 0," \
-            "      backgroundColor: Colors.transparent," \
-            "      systemOverlayStyle: SystemUiOverlayStyle.dark," \
-            "    )," \
-            "  );" \
-            "" \
-            "  static ThemeData get darkTheme => ThemeData(" \
-            "    fontFamily: 'Cairo'," \
-            "    brightness: Brightness.dark," \
-            "    primaryColor: goldColor," \
-            "    scaffoldBackgroundColor: darkBackground," \
-            "    useMaterial3: true," \
-            "    appBarTheme: const AppBarTheme(" \
-            "      elevation: 0," \
-            "      backgroundColor: Colors.transparent," \
-            "      systemOverlayStyle: SystemUiOverlayStyle.light," \
-            "    )," \
-            "  );" \
-            "}" > /tmp/flex_yemen_new/lib/theme/app_theme.dart
+            "void main() => runApp(const FlexYemenApp());" > /tmp/flex_yemen_new/lib/main.dart
           
-          # نسخ الباقي
+          # إنشاء app.dart
+          printf '%s\n' \
+            "import 'package:flutter/material.dart';" \
+            "import 'navigation/main_navigation.dart';" \
+            "import 'theme/app_theme.dart';" \
+            "" \
+            "class FlexYemenApp extends StatefulWidget {" \
+            "  const FlexYemenApp({super.key});" \
+            "" \
+            "  @override" \
+            "  State<FlexYemenApp> createState() => _FlexYemenAppState();" \
+            "}" \
+            "" \
+            "class _FlexYemenAppState extends State<FlexYemenApp> {" \
+            "  bool isDarkMode = true;" \
+            "  int cartCount = 0;" \
+            "" \
+            "  void toggleTheme() => setState(() => isDarkMode = !isDarkMode);" \
+            "  void addToCart() => setState(() => cartCount++);" \
+            "" \
+            "  @override" \
+            "  Widget build(BuildContext context) {" \
+            "    return MaterialApp(" \
+            "      debugShowCheckedModeBanner: false," \
+            "      theme: AppTheme.lightTheme," \
+            "      darkTheme: AppTheme.darkTheme," \
+            "      themeMode: isDarkMode ? ThemeMode.dark : ThemeMode.light," \
+            "      home: MainNavigation(" \
+            "        isDarkMode: isDarkMode," \
+            "        cartCount: cartCount," \
+            "        onThemeToggle: toggleTheme," \
+            "        onAddToCart: addToCart," \
+            "      )," \
+            "    );" \
+            "  }" \
+            "}" > /tmp/flex_yemen_new/lib/app.dart
+          
+          # نسخ باقي الملفات
+          cp -r /tmp/my_code/lib/theme /tmp/flex_yemen_new/lib/ 2>/dev/null || true
           cp -r /tmp/my_code/lib/navigation /tmp/flex_yemen_new/lib/ 2>/dev/null || true
           cp -r /tmp/my_code/lib/screens /tmp/flex_yemen_new/lib/ 2>/dev/null || true
           cp -r /tmp/my_code/lib/widgets /tmp/flex_yemen_new/lib/ 2>/dev/null || true
