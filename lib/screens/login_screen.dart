@@ -7,97 +7,135 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
-      body: Stack(
-        children: [
-          // تدرج لوني في الخلفية
-          Positioned.fill(
-            child: Container(
-              decoration: BoxDecoration(
-                gradient: RadialGradient(
-                  center: Alignment.center,
-                  radius: 1.5,
-                  colors: [AppTheme.goldColor.withOpacity(0.1), Colors.black],
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        child: Column(
+          children: [
+            const SizedBox(height: 50),
+            const Text(
+              'مرحباً بك في فلكس يمن',
+              style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold, color: Colors.black),
+            ),
+            const SizedBox(height: 10),
+            const Text('اختر نوع الحساب للمتابعة', style: TextStyle(color: Colors.grey)),
+            
+            const Expanded(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 25),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    // بطاقة تسجيل دخول كعميل
+                    _AccountTypeCard(
+                      title: 'تسجيل دخول كعميل',
+                      subtitle: 'تصفح، اشتري، وشارك في المزادات',
+                      icon: Icons.person_pin_rounded,
+                      route: '/home', // أو صفحة دخول العميل المخصصة
+                    ),
+                    
+                    const SizedBox(height: 20),
+                    
+                    // بطاقة تسجيل دخول كتاجر
+                    _AccountTypeCard(
+                      title: 'تسجيل دخول كتاجر',
+                      subtitle: 'أضف إعلاناتك، بع منتجاتك، وتابع أرباحك',
+                      icon: Icons.store_rounded,
+                      route: '/merchant',
+                      isMerchant: true,
+                    ),
+                  ],
                 ),
               ),
             ),
-          ),
-          SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 30),
+            
+            // خيار الدخول كضيف في الأسفل
+            Padding(
+              padding: const EdgeInsets.only(bottom: 30),
+              child: TextButton(
+                onPressed: () => Navigator.pushReplacementNamed(context, '/home'),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: const [
+                    Text('تصفح كضيف الآن', style: TextStyle(color: Colors.black54, fontSize: 16)),
+                    SizedBox(width: 5),
+                    Icon(Icons.arrow_forward_ios, size: 14, color: AppTheme.goldColor),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _AccountTypeCard extends StatelessWidget {
+  final String title;
+  final String subtitle;
+  final IconData icon;
+  final String route;
+  final bool isMerchant;
+
+  const _AccountTypeCard({
+    required this.title,
+    required this.subtitle,
+    required this.icon,
+    required this.route,
+    this.isMerchant = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () => Navigator.pushNamed(context, route),
+      borderRadius: BorderRadius.circular(20),
+      child: Container(
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: isMerchant ? Colors.black : Colors.white,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: Colors.grey.withOpacity(0.2)),
+          boxShadow: [
+            BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10, offset: const Offset(0, 5))
+          ],
+        ),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: isMerchant ? AppTheme.goldColor : Colors.black12,
+                borderRadius: BorderRadius.circular(15),
+              ),
+              child: Icon(icon, color: isMerchant ? Colors.black : Colors.black, size: 30),
+            ),
+            const SizedBox(width: 20),
+            Expanded(
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Icon(Icons.flash_on, size: 80, color: AppTheme.goldColor),
-                  const SizedBox(height: 10),
-                  const Text('FLEX YEMEN', style: TextStyle(color: AppTheme.goldColor, fontSize: 30, fontWeight: FontWeight.bold, letterSpacing: 5)),
-                  const Text('بوابتك للتجارة الذكية', style: TextStyle(color: Colors.white54, fontSize: 14)),
-                  const SizedBox(height: 60),
-                  
-                  // زر الدخول كضيف
-                  _buildButton(
-                    context, 
-                    'تصفح كضيف', 
-                    Colors.transparent, 
-                    AppTheme.goldColor, 
-                    () => Navigator.pushReplacementNamed(context, '/home'),
-                    isOutlined: true
+                  Text(
+                    title,
+                    style: TextStyle(
+                      fontSize: 18, 
+                      fontWeight: FontWeight.bold, 
+                      color: isMerchant ? Colors.white : Colors.black
+                    ),
                   ),
-                  const SizedBox(height: 20),
-                  
-                  // زر تسجيل الدخول
-                  _buildButton(
-                    context, 
-                    'تسجيل الدخول', 
-                    AppTheme.goldColor, 
-                    Colors.black, 
-                    () {}
+                  Text(
+                    subtitle,
+                    style: TextStyle(
+                      fontSize: 12, 
+                      color: isMerchant ? Colors.white70 : Colors.grey
+                    ),
                   ),
-                  
-                  const SizedBox(height: 20),
-                  const Text('أو سجل عبر', style: TextStyle(color: Colors.grey)),
-                  const SizedBox(height: 20),
-                  
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      _socialIcon(Icons.phone),
-                      const SizedBox(width: 20),
-                      _socialIcon(Icons.g_mobiledata_rounded),
-                    ],
-                  )
                 ],
               ),
             ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildButton(BuildContext context, String text, Color bg, Color textColor, VoidCallback onTap, {bool isOutlined = false}) {
-    return SizedBox(
-      width: double.infinity,
-      height: 55,
-      child: ElevatedButton(
-        onPressed: onTap,
-        style: ElevatedButton.styleFrom(
-          backgroundColor: bg,
-          foregroundColor: textColor,
-          side: isOutlined ? BorderSide(color: AppTheme.goldColor) : BorderSide.none,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-          elevation: isOutlined ? 0 : 5,
+          ],
         ),
-        child: Text(text, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
       ),
-    );
-  }
-
-  Widget _socialIcon(IconData icon) {
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(shape: BoxShape.circle, border: Border.all(color: Colors.white24)),
-      child: Icon(icon, color: Colors.white, size: 30),
     );
   }
 }
