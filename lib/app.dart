@@ -11,7 +11,8 @@ import 'screens/support_screen.dart';
 import 'screens/security_screen.dart';
 import 'screens/auction_screen.dart';
 import 'screens/merchant_dashboard.dart';
-import 'screens/order_tracking_screen.dart'; // استيراد التتبع
+import 'screens/order_tracking_screen.dart';
+import 'screens/coupons_screen.dart'; // استيراد الكوبونات
 
 class FlexYemenApp extends StatelessWidget {
   const FlexYemenApp({super.key});
@@ -21,6 +22,11 @@ class FlexYemenApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flex Yemen',
       debugShowCheckedModeBanner: false,
+      
+      // إعدادات اللغات (الافتراضي عربي)
+      locale: const Locale('ar', 'YE'),
+      supportedLocales: const [Locale('ar', 'YE'), Locale('en', 'US')],
+      
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: ThemeMode.system, 
@@ -37,7 +43,8 @@ class FlexYemenApp extends StatelessWidget {
         '/security': (context) => const SecurityScreen(),
         '/auctions': (context) => const AuctionScreen(),
         '/merchant': (context) => const MerchantDashboard(),
-        '/tracking': (context) => const OrderTrackingScreen(), // إضافة المسار
+        '/tracking': (context) => const OrderTrackingScreen(),
+        '/coupons': (context) => const CouponsScreen(), // مسار الكوبونات
       },
     );
   }
