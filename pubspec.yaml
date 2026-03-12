@@ -10,7 +10,7 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.6
-  supabase_flutter: ^2.0.0
+  supabase_flutter: ^2.12.0
   google_maps_flutter: ^2.5.3
   geolocator: ^10.1.0
   provider: ^6.1.1
@@ -22,6 +22,6 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
-  # أضف هنا مسارات الصور التي استخدمناها (مثل بانر رمضان)
   assets:
+    - assets/icons/
     - assets/images/
