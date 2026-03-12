@@ -1,35 +1,32 @@
 import 'package:flutter/material.dart';
-import 'navigation/main_navigation.dart';
 import 'theme/app_theme.dart';
+import 'screens/login_screen.dart';
+import 'screens/home_screen.dart';
+import 'screens/profile_screen.dart';
+import 'screens/wallet_screen.dart';
+import 'screens/add_ad_screen.dart';
+import 'screens/map_screen.dart';
 
-class FlexYemenApp extends StatefulWidget {
+class FlexYemenApp extends StatelessWidget {
   const FlexYemenApp({super.key});
-
-  @override
-  State<FlexYemenApp> createState() => _FlexYemenAppState();
-}
-
-class _FlexYemenAppState extends State<FlexYemenApp> {
-  bool isDarkMode = true;
-  int cartCount = 0;
-
-  void toggleTheme() => setState(() => isDarkMode = !isDarkMode);
-  void addToCart() => setState(() => cartCount++);
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
       title: 'Flex Yemen',
+      debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
-      themeMode: isDarkMode ? ThemeMode.dark : ThemeMode.light,
-      home: MainNavigation(
-        isDarkMode: isDarkMode,
-        cartCount: cartCount,
-        onThemeToggle: toggleTheme,
-        onAddToCart: addToCart,
-      ),
+      themeMode: ThemeMode.system, // يتغير تلقائياً حسب إعدادات الهاتف
+      initialRoute: '/login',
+      routes: {
+        '/login': (context) => const LoginScreen(),
+        '/home': (context) => const HomeScreen(),
+        '/profile': (context) => const ProfileScreen(),
+        '/wallet': (context) => const WalletScreen(),
+        '/add_ad': (context) => const AddAdScreen(),
+        '/map': (context) => const MapScreen(),
+      },
     );
   }
 }
