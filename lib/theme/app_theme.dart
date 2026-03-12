@@ -1,31 +1,74 @@
 import 'package:flutter/material.dart';
 
 class AppTheme {
-  static const goldColor = Color(0xFFD4AF37);
-  static const darkBg = Color(0xFF0D0D0D);
-  static const cardDark = Color(0xFF1A1A1A); // هذا المتغير الذي تسبب بالخطأ
+  static const Color goldColor = Color(0xFFFFD700);
+  static const Color darkBg = Color(0xFF121212);
 
-  static ThemeData lightTheme = ThemeData(
+  // 1. الثيم الفاتح (النهاري) - أبيض ناصع مع تفاصيل واضحة
+  static final ThemeData lightTheme = ThemeData(
     useMaterial3: true,
     brightness: Brightness.light,
     primaryColor: goldColor,
     scaffoldBackgroundColor: Colors.white,
-    colorScheme: ColorScheme.light(
-      primary: goldColor,
-      surface: Colors.white,
+    
+    // إعدادات الـ AppBar في النهار
+    appBarTheme: const AppBarTheme(
+      backgroundColor: Colors.white,
+      elevation: 0,
+      iconTheme: IconThemeData(color: Colors.black),
+      titleTextStyle: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
     ),
-    cardTheme: const CardThemeData(color: Colors.white, elevation: 2),
+
+    // إعدادات البطاقات (Cards) لتظهر تفاصيل المنتج
+    cardTheme: CardTheme(
+      color: Colors.white,
+      elevation: 2,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15),
+        side: BorderSide(color: Colors.grey.shade200), // إطار خفيف يحدد المنتج
+      ),
+    ),
+
+    // ألوان النصوص في النهار
+    textTheme: const TextTheme(
+      bodyLarge: TextStyle(color: Colors.black, fontSize: 16),
+      bodyMedium: TextStyle(color: Colors.black87, fontSize: 14),
+      titleLarge: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+    ),
+
+    // ألوان الأيقونات العامة
+    iconTheme: const IconThemeData(color: Colors.black87),
   );
 
-  static ThemeData darkTheme = ThemeData(
+  // 2. الثيم الداكن (الليلي) - الفخامة السوداء والذهبية
+  static final ThemeData darkTheme = ThemeData(
     useMaterial3: true,
     brightness: Brightness.dark,
     primaryColor: goldColor,
     scaffoldBackgroundColor: darkBg,
-    colorScheme: const ColorScheme.dark(
-      primary: goldColor,
-      surface: cardDark,
+    
+    appBarTheme: const AppBarTheme(
+      backgroundColor: darkBg,
+      elevation: 0,
+      iconTheme: IconThemeData(color: goldColor),
+      titleTextStyle: TextStyle(color: goldColor, fontSize: 20, fontWeight: FontWeight.bold),
     ),
-    cardTheme: const CardThemeData(color: cardDark, elevation: 0),
+
+    cardTheme: CardTheme(
+      color: const Color(0xFF1E1E1E),
+      elevation: 4,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15),
+        side: BorderSide(color: goldColor.withOpacity(0.1)),
+      ),
+    ),
+
+    textTheme: const TextTheme(
+      bodyLarge: TextStyle(color: Colors.white, fontSize: 16),
+      bodyMedium: TextStyle(color: Colors.white70, fontSize: 14),
+      titleLarge: TextStyle(color: goldColor, fontWeight: FontWeight.bold),
+    ),
+
+    iconTheme: const IconThemeData(color: goldColor),
   );
 }
