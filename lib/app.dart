@@ -1,3 +1,4 @@
+import 'screens/forgot_password_screen.dart';
 import 'screens/splash_screen.dart';
 import 'screens/referral_screen.dart';
 import 'screens/vip_store_screen.dart';
@@ -49,6 +50,7 @@ class FlexYemenApp extends StatelessWidget {
         '/merchant': (context) => const MerchantDashboard(),
         '/vip_store': (context) => const VipStoreScreen(),
         '/referral': (context) => const ReferralScreen(),
+        '/forgot_password': (context) => const ForgotPasswordScreen(),
         '/tracking': (context) => const OrderTrackingScreen(),
         '/coupons': (context) => const CouponsScreen(), // مسار الكوبونات
       },

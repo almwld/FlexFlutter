@@ -6,8 +6,6 @@ workflows:
     scripts:
       - name: Get dependencies
         script: flutter pub get
-      - name: Generate Launcher Icons
-        script: flutter pub run flutter_launcher_icons:main
       - name: Build APK
         script: flutter build apk --release
     artifacts:
