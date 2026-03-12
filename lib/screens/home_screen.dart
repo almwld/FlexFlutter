@@ -6,8 +6,13 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('فلكس يمن', style: TextStyle(color: AppTheme.goldColor))),
-      body: const Center(child: Text('مرحباً بك في منصة العميل')),
+      appBar: AppBar(
+        title: const Text('فلكس يمن', style: TextStyle(fontWeight: FontWeight.bold, color: AppTheme.goldColor)),
+        centerTitle: true,
+      ),
+      body: const Center(
+        child: Text('مرحباً بك في منصة العميل - قيد التطوير'),
+      ),
     );
   }
 }
