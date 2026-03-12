@@ -28,7 +28,7 @@ jobs:
           rm -rf android/
           flutter create --project-name flex_yemen --platforms android .
           
-          # إعدادات الأندرويد المفروضة بقوة لتتوافق مع awesome_notifications
+          # إعدادات الأندرويد مع توحيد إصدار Java إلى 17
           cat << 'CONF' > android/app/build.gradle
           plugins {
               id "com.android.application"
@@ -48,6 +48,15 @@ jobs:
                   versionName "1.0.0"
               }
 
+              compileOptions {
+                  sourceCompatibility JavaVersion.VERSION_17
+                  targetCompatibility JavaVersion.VERSION_17
+              }
+
+              kotlinOptions {
+                  jvmTarget = '17'
+              }
+
               buildTypes {
                   release {
                       signingConfig signingConfigs.debug
@@ -60,7 +69,7 @@ jobs:
           }
           CONF
 
-          # تحديث المحرك الرئيسي
+          # تحديث محرك البناء والتوافق
           sed -i 's/id "com.android.application" version ".*"/id "com.android.application" version "8.1.1"/' android/settings.gradle
           sed -i 's/id "org.jetbrains.kotlin.android" version ".*"/id "org.jetbrains.kotlin.android" version "1.9.20"/' android/settings.gradle
           sed -i 's/gradle-.*-all.zip/gradle-8.0-all.zip/' android/gradle/wrapper/gradle-wrapper.properties
