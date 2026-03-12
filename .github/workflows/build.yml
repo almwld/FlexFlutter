@@ -28,17 +28,18 @@ jobs:
           rm -rf android/
           flutter create --project-name flex_yemen --platforms android .
           
-          # 1. تحديث إصدارات Gradle و Kotlin
+          # 1. تحديث إعدادات Gradle و Kotlin في settings.gradle
           sed -i 's/id "com.android.application" version ".*"/id "com.android.application" version "8.1.1"/' android/settings.gradle
           sed -i 's/id "org.jetbrains.kotlin.android" version ".*"/id "org.jetbrains.kotlin.android" version "1.9.20"/' android/settings.gradle
           sed -i 's/gradle-.*-all.zip/gradle-8.0-all.zip/' android/gradle/wrapper/gradle-wrapper.properties
           
-          # 2. تحديث الـ SDK ليتوافق مع الخرائط والإشعارات
-          # رفع الـ compileSdk و targetSdk لـ 34 (أو 36 إذا استمر الطلب ولكن 34 مستقر)
-          sed -i 's/compileSdk = .*/compileSdk = 34/' android/app/build.gradle
-          sed -i 's/targetSdk = .*/targetSdk = 34/' android/app/build.gradle
-          # رفع الـ minSdk لـ 20 كما طلبت الخرائط
-          sed -i 's/minSdk = .*/minSdk = 20/' android/app/build.gradle
+          # 2. تحديث الـ SDK داخل app/build.gradle (استخدام بحث مرن عن الكلمات المفتاحية)
+          # استبدال أي سطر يحتوي على compileSdk بقيمة 34
+          sed -i 's/compileSdk .*/compileSdk = 34/' android/app/build.gradle
+          # استبدال أي سطر يحتوي على minSdkVersion بقيمة 20
+          sed -i 's/minSdk .*/minSdk = 20/' android/app/build.gradle
+          # استبدال أي سطر يحتوي على targetSdk بقيمة 34
+          sed -i 's/targetSdk .*/targetSdk = 34/' android/app/build.gradle
 
       - name: Install dependencies
         run: flutter pub get
