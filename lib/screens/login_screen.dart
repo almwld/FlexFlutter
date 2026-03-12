@@ -8,91 +8,96 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-      body: Container(
-        width: double.infinity,
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topRight,
-            end: Alignment.bottomLeft,
-            colors: [Colors.black, Colors.grey[900]!, Colors.black],
-          ),
-        ),
-        child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 30),
-            child: Column(
-              children: [
-                const SizedBox(height: 60),
-                // الشعار الذهبي
-                Container(
-                  padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(color: AppTheme.goldColor, width: 2),
-                  ),
-                  child: const Icon(Icons.shopping_bag_outlined, size: 80, color: AppTheme.goldColor),
+      body: Stack(
+        children: [
+          // تدرج لوني في الخلفية
+          Positioned.fill(
+            child: Container(
+              decoration: BoxDecoration(
+                gradient: RadialGradient(
+                  center: Alignment.center,
+                  radius: 1.5,
+                  colors: [AppTheme.goldColor.withOpacity(0.1), Colors.black],
                 ),
-                const SizedBox(height: 20),
-                const Text('FLEX YEMEN', style: TextStyle(color: AppTheme.goldColor, fontSize: 28, fontWeight: FontWeight.bold, letterSpacing: 4)),
-                const Text('السوق اليمني المتكامل', style: TextStyle(color: Colors.white70, fontSize: 14)),
-                const Spacer(),
-                
-                // زر الدخول كضيف (أولاً لإعطاء حرية للمستخدم)
-                _buildGuestButton(context),
-                const SizedBox(height: 20),
-                
-                // أزرار تسجيل الدخول
-                _buildLoginButton(context),
-                const SizedBox(height: 15),
-                
-                Row(
-                  children: [
-                    Expanded(child: Divider(color: Colors.grey[800])),
-                    const Padding(padding: EdgeInsets.symmetric(horizontal: 10), child: Text('أو', style: TextStyle(color: Colors.grey))),
-                    Expanded(child: Divider(color: Colors.grey[800])),
-                  ],
-                ),
-                const SizedBox(height: 15),
-                _buildSocialButton(Icons.phone, 'التسجيل عبر رقم الهاتف'),
-                const SizedBox(height: 40),
-              ],
+              ),
             ),
           ),
+          SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 30),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(Icons.flash_on, size: 80, color: AppTheme.goldColor),
+                  const SizedBox(height: 10),
+                  const Text('FLEX YEMEN', style: TextStyle(color: AppTheme.goldColor, fontSize: 30, fontWeight: FontWeight.bold, letterSpacing: 5)),
+                  const Text('بوابتك للتجارة الذكية', style: TextStyle(color: Colors.white54, fontSize: 14)),
+                  const SizedBox(height: 60),
+                  
+                  // زر الدخول كضيف
+                  _buildButton(
+                    context, 
+                    'تصفح كضيف', 
+                    Colors.transparent, 
+                    AppTheme.goldColor, 
+                    () => Navigator.pushReplacementNamed(context, '/home'),
+                    isOutlined: true
+                  ),
+                  const SizedBox(height: 20),
+                  
+                  // زر تسجيل الدخول
+                  _buildButton(
+                    context, 
+                    'تسجيل الدخول', 
+                    AppTheme.goldColor, 
+                    Colors.black, 
+                    () {}
+                  ),
+                  
+                  const SizedBox(height: 20),
+                  const Text('أو سجل عبر', style: TextStyle(color: Colors.grey)),
+                  const SizedBox(height: 20),
+                  
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      _socialIcon(Icons.phone),
+                      const SizedBox(width: 20),
+                      _socialIcon(Icons.g_mobiledata_rounded),
+                    ],
+                  )
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildButton(BuildContext context, String text, Color bg, Color textColor, VoidCallback onTap, {bool isOutlined = false}) {
+    return SizedBox(
+      width: double.infinity,
+      height: 55,
+      child: ElevatedButton(
+        onPressed: onTap,
+        style: ElevatedButton.styleFrom(
+          backgroundColor: bg,
+          foregroundColor: textColor,
+          side: isOutlined ? BorderSide(color: AppTheme.goldColor) : BorderSide.none,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+          elevation: isOutlined ? 0 : 5,
         ),
+        child: Text(text, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
       ),
     );
   }
 
-  Widget _buildGuestButton(BuildContext context) {
-    return OutlinedButton(
-      onPressed: () => Navigator.pushReplacementNamed(context, '/home'),
-      style: OutlinedButton.styleFrom(
-        side: const BorderSide(color: AppTheme.goldColor),
-        minimumSize: const Size(double.infinity, 55),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-      ),
-      child: const Text('التصفح كضيف', style: TextStyle(color: AppTheme.goldColor, fontSize: 18, fontWeight: FontWeight.bold)),
-    );
-  }
-
-  Widget _buildLoginButton(BuildContext context) {
-    return ElevatedButton(
-      onPressed: () {},
-      style: ElevatedButton.styleFrom(
-        backgroundColor: AppTheme.goldColor,
-        foregroundColor: Colors.black,
-        minimumSize: const Size(double.infinity, 55),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-      ),
-      child: const Text('تسجيل الدخول', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-    );
-  }
-
-  Widget _buildSocialButton(IconData icon, String text) {
-    return TextButton.icon(
-      onPressed: () {},
-      icon: Icon(icon, color: Colors.white70),
-      label: Text(text, style: const TextStyle(color: Colors.white70)),
+  Widget _socialIcon(IconData icon) {
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(shape: BoxShape.circle, border: Border.all(color: Colors.white24)),
+      child: Icon(icon, color: Colors.white, size: 30),
     );
   }
 }

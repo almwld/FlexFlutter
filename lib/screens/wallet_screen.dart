@@ -6,151 +6,116 @@ class WalletScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bool isDark = Theme.of(context).brightness == Brightness.dark;
-
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('محفظة فلكس'),
-        actions: [IconButton(icon: const Icon(Icons.help_outline), onPressed: () {})],
-      ),
+      appBar: AppBar(title: const Text('محفظة فلكس'), centerTitle: true),
       body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16),
         child: Column(
           children: [
             _buildBalanceCard(),
-            _buildQuickActions(),
-            _buildServiceGrid(),
-            _buildTransactionHistory(isDark),
+            const SizedBox(height: 25),
+            _buildMainActions(),
+            const SizedBox(height: 30),
+            _buildSectionTitle('خدمات الدفع السريع'),
+            _buildServicesGrid(),
+            const SizedBox(height: 30),
+            _buildSectionTitle('آخر العمليات'),
+            _buildTransactionList(),
           ],
         ),
       ),
     );
   }
 
-  // كرت الرصيد
   Widget _buildBalanceCard() {
     return Container(
-      margin: const EdgeInsets.all(20),
+      width: double.infinity,
       padding: const EdgeInsets.all(25),
       decoration: BoxDecoration(
-        gradient: const LinearGradient(colors: [Color(0xFFD4AF37), Color(0xFF8C6E12)]),
-        borderRadius: BorderRadius.circular(25),
-        boxShadow: [BoxShadow(color: Colors.black26, blurRadius: 10, offset: Offset(0, 4))],
+        gradient: const LinearGradient(colors: [AppTheme.goldColor, Color(0xFFB8860B)]),
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [BoxShadow(color: AppTheme.goldColor.withOpacity(0.3), blurRadius: 15)],
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text('الرصيد الكلي', style: TextStyle(color: Colors.black54, fontWeight: FontWeight.bold)),
-          const SizedBox(height: 10),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: const [
-              Text('750,000', style: TextStyle(color: Colors.black, fontSize: 32, fontWeight: FontWeight.bold)),
-              Text('ريال يمني', style: TextStyle(color: Colors.black87, fontSize: 16)),
-            ],
-          ),
-          const Divider(color: Colors.black12),
-          const Text('رقم المحفظة: 77XXXXXXX', style: TextStyle(color: Colors.black45, fontSize: 12)),
+        children: const [
+          Text('رصيدك المتاح', style: TextStyle(color: Colors.black54, fontWeight: FontWeight.bold)),
+          SizedBox(height: 10),
+          Text('450,000', style: TextStyle(color: Colors.black, fontSize: 35, fontWeight: FontWeight.bold)),
+          Text('ريال يمني', style: TextStyle(color: Colors.black87, fontSize: 14)),
         ],
       ),
     );
   }
 
-  // أزرار العمليات الأساسية
-  Widget _buildQuickActions() {
+  Widget _buildMainActions() {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
-        _actionItem(Icons.add_to_photos_rounded, 'إيداع'),
-        _actionItem(Icons.account_balance_wallet_rounded, 'سحب'),
-        _actionItem(Icons.send_rounded, 'تحويل'),
-        _actionItem(Icons.qr_code_scanner_rounded, 'مسح QR'),
+        _actionCircle(Icons.add_card, 'إيداع'),
+        _actionCircle(Icons.account_balance_wallet, 'سحب'),
+        _actionCircle(Icons.swap_horizontal_circle, 'تحويل'),
       ],
     );
   }
 
-  Widget _actionItem(IconData icon, String label) {
+  Widget _actionCircle(IconData icon, String label) {
     return Column(
       children: [
-        CircleAvatar(radius: 28, backgroundColor: AppTheme.goldColor.withOpacity(0.15), child: Icon(icon, color: AppTheme.goldColor)),
+        Container(
+          padding: const EdgeInsets.all(15),
+          decoration: BoxDecoration(color: AppTheme.goldColor.withOpacity(0.1), shape: BoxShape.circle),
+          child: Icon(icon, color: AppTheme.goldColor, size: 30),
+        ),
         const SizedBox(height: 8),
-        Text(label, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
+        Text(label, style: const TextStyle(fontWeight: FontWeight.bold)),
       ],
     );
   }
 
-  // شبكة الخدمات الإضافية
-  Widget _buildServiceGrid() {
-    return Padding(
-      padding: const EdgeInsets.all(20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+  Widget _buildServicesGrid() {
+    final services = [
+      {'icon': Icons.phone_android, 'label': 'رصيد'},
+      {'icon': Icons.wifi, 'label': 'إنترنت'},
+      {'icon': Icons.lightbulb, 'label': 'كهرباء'},
+      {'icon': Icons.water_drop, 'label': 'مياه'},
+    ];
+    return GridView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 4, mainAxisSpacing: 10),
+      itemCount: services.length,
+      itemBuilder: (context, i) => Column(
         children: [
-          const Text('خدمات الدفع', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-          const SizedBox(height: 15),
-          GridView.count(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            crossAxisCount: 4,
-            mainAxisSpacing: 20,
-            children: [
-              _serviceItem(Icons.phone_android, 'رصيد'),
-              _serviceItem(Icons.wifi, 'إنترنت'),
-              _serviceItem(Icons.lightbulb_outline, 'كهرباء'),
-              _serviceItem(Icons.water_drop_outlined, 'مياه'),
-            ],
-          ),
+          Icon(services[i]['icon'] as IconData, color: Colors.grey),
+          const SizedBox(height: 5),
+          Text(services[i]['label'] as String, style: const TextStyle(fontSize: 12)),
         ],
       ),
     );
   }
 
-  Widget _serviceItem(IconData icon, String label) {
-    return Column(
-      children: [
-        Icon(icon, color: Colors.grey),
-        const SizedBox(height: 5),
-        Text(label, style: const TextStyle(fontSize: 11, color: Colors.grey)),
-      ],
+  Widget _buildTransactionList() {
+    return ListView.separated(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: 3,
+      separatorBuilder: (_, __) => const Divider(),
+      itemBuilder: (context, i) => ListTile(
+        leading: CircleAvatar(
+          backgroundColor: i == 1 ? Colors.red.withOpacity(0.1) : Colors.green.withOpacity(0.1),
+          child: Icon(i == 1 ? Icons.arrow_upward : Icons.arrow_downward, color: i == 1 ? Colors.red : Colors.green),
+        ),
+        title: Text(i == 1 ? 'شراء إعلان VIP' : 'إيداع من صرافة الكريمي'),
+        subtitle: const Text('2026-03-12'),
+        trailing: Text(i == 1 ? '-2000' : '+5000', style: const TextStyle(fontWeight: FontWeight.bold)),
+      ),
     );
   }
 
-  // سجل العمليات
-  Widget _buildTransactionHistory(bool isDark) {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text('آخر العمليات', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-              TextButton(onPressed: () {}, child: const Text('عرض الكل', style: TextStyle(color: AppTheme.goldColor))),
-            ],
-          ),
-          ListView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: 5,
-            itemBuilder: (context, index) {
-              return Card(
-                color: isDark ? Colors.grey[900] : Colors.white,
-                child: ListTile(
-                  leading: CircleAvatar(
-                    backgroundColor: index.isEven ? Colors.green[100] : Colors.red[100],
-                    child: Icon(index.isEven ? Icons.arrow_downward : Icons.arrow_upward, color: index.isEven ? Colors.green : Colors.red, size: 18),
-                  ),
-                  title: Text(index.isEven ? 'إيداع من الكريمي' : 'دفع قيمة إعلان'),
-                  subtitle: const Text('12 مارس 2026'),
-                  trailing: Text(
-                    '${index.isEven ? "+" : "-"} 5000',
-                    style: TextStyle(fontWeight: FontWeight.bold, color: index.isEven ? Colors.green : Colors.red),
-                  ),
-                ),
-              );
-            },
-          ),
-        ],
-      ),
+  Widget _buildSectionTitle(String title) {
+    return Align(
+      alignment: Alignment.centerRight,
+      child: Text(title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppTheme.goldColor)),
     );
   }
 }
