@@ -23,11 +23,22 @@ jobs:
           flutter-version: '3.19.0'
           channel: 'stable'
 
-      - name: Repair Android Structure
+      - name: Repair and Upgrade Android Structure
         run: |
+          # 1. إعادة إنشاء مجلد أندرويد نظيف
           rm -rf android/
-          # استخدام اسم حزمة صحيح لتجنب خطأ التسمية
           flutter create --project-name flex_yemen --platforms android .
+          
+          # 2. تحديث نسخة Gradle و Kotlin تلقائياً داخل الـ Action
+          sed -i 's/ext.kotlin_version = .*/ext.kotlin_version = "1.9.20"/' android/build.gradle
+          sed -i 's/com.android.tools.build:gradle:.*/com.android.tools.build:gradle:8.1.1"/' android/build.gradle
+          
+          # 3. تحديث الـ Wrapper لنسخة 8.0 ليتوافق مع Plugin 8.1.1
+          sed -i 's/gradle-.*-all.zip/gradle-8.0-all.zip/' android/gradle/wrapper/gradle-wrapper.properties
+          
+          # 4. رفع الـ SDK إلى 34 لضمان قبول المكتبات الحديثة
+          sed -i 's/compileSdkVersion .*/compileSdkVersion 34/' android/app/build.gradle
+          sed -i 's/targetSdkVersion .*/targetSdkVersion 34/' android/app/build.gradle
 
       - name: Install dependencies
         run: flutter pub get
