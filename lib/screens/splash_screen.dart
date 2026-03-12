@@ -13,7 +13,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    // الانتقال للشاشة الرئيسية بعد 3 ثوانٍ
+    // الانتقال المباشر للمنصة بعد 3 ثوانٍ
     Timer(const Duration(seconds: 3), () {
       Navigator.pushReplacementNamed(context, '/home');
     });
@@ -21,27 +21,24 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       backgroundColor: Colors.black,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // شعارك الجديد الذي نقلناه قبل قليل
-            Image.asset('assets/icons/app_icon.png', width: 150),
-            const SizedBox(height: 20),
-            const CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(AppTheme.goldColor),
-            ),
-            const SizedBox(height: 10),
-            const Text(
-              'FLEX YEMEN',
+            Text(
+              'فلكس يمن',
               style: TextStyle(
                 color: AppTheme.goldColor,
-                fontSize: 24,
+                fontSize: 32,
                 fontWeight: FontWeight.bold,
-                letterSpacing: 3,
+                letterSpacing: 2,
               ),
+            ),
+            SizedBox(height: 30),
+            CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation<Color>(AppTheme.goldColor),
             ),
           ],
         ),

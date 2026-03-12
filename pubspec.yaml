@@ -22,12 +22,12 @@ dev_dependencies:
   flutter_lints: ^3.0.0
   flutter_launcher_icons: ^0.13.1
 
-# تعديل الإعدادات هنا لتعطيل iOS
+# إعدادات الأيقونة الرسمية
 flutter_launcher_icons:
-  android: true
+  android: "launcher_icon"
   ios: false
   image_path: "assets/icons/app_icon.png"
-  adaptive_icon_background: "#0D0D0D"
+  adaptive_icon_background: "#000000"
   adaptive_icon_foreground: "assets/icons/app_icon.png"
 
 flutter:
