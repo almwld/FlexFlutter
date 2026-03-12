@@ -9,10 +9,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4 # تحديث لـ v4
+      - uses: actions/checkout@v4
 
       - name: Set up Java
-        uses: actions/setup-java@v4 # تحديث لـ v4
+        uses: actions/setup-java@v4
         with:
           distribution: 'zulu'
           java-version: '17'
@@ -26,7 +26,8 @@ jobs:
       - name: Repair Android Structure
         run: |
           rm -rf android/
-          flutter create . --platforms android
+          # استخدام اسم حزمة صحيح لتجنب خطأ التسمية
+          flutter create --project-name flex_yemen --platforms android .
 
       - name: Install dependencies
         run: flutter pub get
@@ -38,7 +39,7 @@ jobs:
         run: flutter build apk --release
 
       - name: Upload APK
-        uses: actions/upload-artifact@v4 # هذا هو الإصلاح المطلوب (v4)
+        uses: actions/upload-artifact@v4
         with:
           name: flex-yemen-release-apk
           path: build/app/outputs/flutter-apk/app-release.apk
