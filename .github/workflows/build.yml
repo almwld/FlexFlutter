@@ -28,7 +28,7 @@ jobs:
           rm -rf android/
           flutter create --project-name flex_yemen --platforms android .
           
-          # 1. إنشاء ملف إعدادات خارجي لا يمكن لـ Gradle تجاهله
+          # إعدادات الأندرويد المفروضة بقوة لتتوافق مع awesome_notifications
           cat << 'CONF' > android/app/build.gradle
           plugins {
               id "com.android.application"
@@ -38,11 +38,11 @@ jobs:
 
           android {
               namespace "com.example.flex_yemen"
-              compileSdk 34
+              compileSdk 36
 
               defaultConfig {
                   applicationId "com.example.flex_yemen"
-                  minSdk 21
+                  minSdk 23
                   targetSdk 34
                   versionCode 1
                   versionName "1.0.0"
@@ -60,7 +60,7 @@ jobs:
           }
           CONF
 
-          # 2. تحديث المحرك الرئيسي
+          # تحديث المحرك الرئيسي
           sed -i 's/id "com.android.application" version ".*"/id "com.android.application" version "8.1.1"/' android/settings.gradle
           sed -i 's/id "org.jetbrains.kotlin.android" version ".*"/id "org.jetbrains.kotlin.android" version "1.9.20"/' android/settings.gradle
           sed -i 's/gradle-.*-all.zip/gradle-8.0-all.zip/' android/gradle/wrapper/gradle-wrapper.properties
