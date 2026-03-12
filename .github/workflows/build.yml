@@ -1,0 +1,46 @@
+name: Flex Yemen Build APK
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.19.0' # يمكنك تغيير النسخة حسب حاجتك
+          channel: 'stable'
+
+      - name: Repair Android Structure
+        run: |
+          rm -rf android/
+          flutter create . --platforms android
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Generate App Icons
+        run: flutter pub run flutter_launcher_icons
+
+      - name: Build APK
+        run: flutter build apk --release
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v3
+        with:
+          name: flex-yemen-release-apk
+          path: build/app/outputs/flutter-apk/app-release.apk
