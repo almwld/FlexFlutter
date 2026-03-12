@@ -6,6 +6,9 @@ import 'screens/profile_screen.dart';
 import 'screens/wallet_screen.dart';
 import 'screens/add_ad_screen.dart';
 import 'screens/map_screen.dart';
+import 'screens/privacy_screen.dart';
+import 'screens/support_screen.dart';
+import 'screens/security_screen.dart';
 
 class FlexYemenApp extends StatelessWidget {
   const FlexYemenApp({super.key});
@@ -15,9 +18,13 @@ class FlexYemenApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flex Yemen',
       debugShowCheckedModeBanner: false,
+      
+      // إعدادات الثيم التكيفي (إصلاح مشكلة السواد)
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
-      themeMode: ThemeMode.system, // يتغير تلقائياً حسب إعدادات الهاتف
+      themeMode: ThemeMode.system, 
+
+      // المسارات (Routes)
       initialRoute: '/login',
       routes: {
         '/login': (context) => const LoginScreen(),
@@ -26,6 +33,9 @@ class FlexYemenApp extends StatelessWidget {
         '/wallet': (context) => const WalletScreen(),
         '/add_ad': (context) => const AddAdScreen(),
         '/map': (context) => const MapScreen(),
+        '/privacy': (context) => const PrivacyScreen(),
+        '/support': (context) => const SupportScreen(),
+        '/security': (context) => const SecurityScreen(),
       },
     );
   }

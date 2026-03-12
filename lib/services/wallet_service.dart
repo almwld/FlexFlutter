@@ -1,41 +1,49 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:convert';
 
 class WalletService {
-  static final _supabase = Supabase.instance.client;
+  static final _client = Supabase.instance.client;
 
-  // جلب الرصيد مع دعم الأوفلاين
-  static Future<double> getBalance() async {
-    final prefs = await SharedPreferences.getInstance();
-    
-    try {
-      final userId = _supabase.auth.currentUser?.id;
-      if (userId == null) return 0.0;
+  // الحصول على بيانات المحفظة والرصيد
+  static Future<Map<String, dynamic>> getWalletData() async {
+    final user = _client.auth.currentUser;
+    if (user == null) return {'balance': 0.0};
 
-      final data = await _supabase.from('wallets').select('balance').eq('user_id', userId).single();
-      final balance = (data['balance'] as num).toDouble();
-      
-      // حفظ للعمل أوفلاين
-      await prefs.setDouble('cached_balance', balance);
-      return balance;
-    } catch (e) {
-      // في حال انقطاع النت، ارجع للقيمة المخزنة
-      return prefs.getDouble('cached_balance') ?? 0.0;
-    }
+    final response = await _client
+        .from('wallets')
+        .select()
+        .eq('user_id', user.id)
+        .single();
+    return response;
   }
 
-  // جلب العمليات مع دعم الأوفلاين
-  static Future<List<Map<String, dynamic>>> getTransactions() async {
-    final prefs = await SharedPreferences.getInstance();
-    
-    try {
-      final response = await _supabase.from('transactions').select().order('created_at');
-      await prefs.setString('cached_txs', jsonEncode(response));
-      return List<Map<String, dynamic>>.from(response);
-    } catch (e) {
-      final cached = prefs.getString('cached_txs');
-      return cached != null ? List<Map<String, dynamic>>.from(jsonDecode(cached)) : [];
-    }
+  // إجراء عملية مالية (إيداع/سحب/دفع)
+  static Future<void> createTransaction({
+    required String type,
+    required double amount,
+    required String description,
+  }) async {
+    final user = _client.auth.currentUser;
+    if (user == null) return;
+
+    // جلب معرف المحفظة أولاً
+    final wallet = await getWalletData();
+
+    await _client.from('wallet_transactions').insert({
+      'wallet_id': wallet['id'],
+      'user_id': user.id,
+      'type': type,
+      'amount': amount,
+      'description': description,
+    });
+  }
+
+  // الاستماع لتحديثات الرصيد لحظياً (Real-time)
+  static Stream<List<Map<String, dynamic>>> getBalanceStream() {
+    final user = _client.auth.currentUser;
+    return _client
+        .from('wallets')
+        .stream(primaryKey: ['id'])
+        .eq('user_id', user?.id ?? '')
+        .map((data) => data);
   }
 }
