@@ -16,7 +16,7 @@ class HomeScreen extends StatelessWidget {
           IconButton(icon: const Icon(Icons.tune), onPressed: () { showModalBottomSheet(context: context, isScrollControlled: true, shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(25))), builder: (context) => const SearchFilters()); }),
         ],
       ),
-      body: SingleChildScrollView(
+      body: products == null ? Center(child: CircularProgressIndicator()) : SingleChildScrollView(
         child: Column(
           children: [
             const MainSlider(),

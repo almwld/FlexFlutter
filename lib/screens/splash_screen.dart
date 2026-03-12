@@ -15,7 +15,7 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
     // الانتقال للشاشة الرئيسية بعد 3 ثوانٍ
     Timer(const Duration(seconds: 3), () {
-      Navigator.pushReplacementNamed(context, '/login');
+      Navigator.pushReplacementNamed(context, '/home');
     });
   }
 
