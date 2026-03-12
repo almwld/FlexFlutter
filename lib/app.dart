@@ -9,6 +9,7 @@ import 'screens/map_screen.dart';
 import 'screens/privacy_screen.dart';
 import 'screens/support_screen.dart';
 import 'screens/security_screen.dart';
+import 'screens/auction_screen.dart'; // استيراد المزاد
 
 class FlexYemenApp extends StatelessWidget {
   const FlexYemenApp({super.key});
@@ -18,13 +19,9 @@ class FlexYemenApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flex Yemen',
       debugShowCheckedModeBanner: false,
-      
-      // إعدادات الثيم التكيفي (إصلاح مشكلة السواد)
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: ThemeMode.system, 
-
-      // المسارات (Routes)
       initialRoute: '/login',
       routes: {
         '/login': (context) => const LoginScreen(),
@@ -36,6 +33,7 @@ class FlexYemenApp extends StatelessWidget {
         '/privacy': (context) => const PrivacyScreen(),
         '/support': (context) => const SupportScreen(),
         '/security': (context) => const SecurityScreen(),
+        '/auctions': (context) => const AuctionScreen(), // إضافة المزاد
       },
     );
   }
