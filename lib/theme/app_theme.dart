@@ -1,43 +1,161 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class AppTheme {
-  static const Color goldColor = Color(0xFFFFD700);
-  static const Color darkBg = Color(0 pill: 0xFF121212);
+  // الألوان الأساسية - الذهبي والأسود
+  static const Color goldColor = Color(0xFFD4AF37);
+  static const Color darkGold = Color(0xFFB8860B);
+  static const Color lightGold = Color(0xFFF4E4BC);
+  static const Color black = Color(0xFF0A0A0A);
+  static const Color darkGrey = Color(0xFF1A1A1A);
+  static const Color grey = Color(0xFF2A2A2A);
+  static const Color lightGrey = Color(0xFF888888);
+  static const Color white = Colors.white;
+  
+  // ألوان البطاقات - المفقودة!
+  static const Color darkCard = Color(0xFF1E1E1E);
+  static const Color lightCard = Color(0xFF2C2C2C);
+  static const Color cardShadow = Color(0xFF000000);
 
-  static ThemeData darkTheme = ThemeData(
-    brightness: Brightness.dark,
-    primaryColor: goldColor,
-    scaffoldBackgroundColor: Colors.black,
-    cardColor: const Color(0xFF1E1E1E),
-    colorScheme: const ColorScheme.dark(
-      primary: goldColor,
-      secondary: goldColor,
-      surface: Color(0xFF1E1E1E),
-    ),
-    textTheme: const TextTheme(
-      bodyLarge: TextStyle(color: Colors.white),
-      bodyMedium: TextStyle(color: Colors.grey),
-    ),
-  );
+  static ThemeData get darkTheme {
+    return ThemeData(
+      useMaterial3: true,
+      brightness: Brightness.dark,
+      scaffoldBackgroundColor: black,
+      primaryColor: goldColor,
+      colorScheme: const ColorScheme.dark(
+        primary: goldColor,
+        secondary: darkGold,
+        surface: darkGrey,
+        onPrimary: Colors.black,
+        onSecondary: Colors.white,
+        onSurface: Colors.white,
+      ),
+      appBarTheme: const AppBarTheme(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        centerTitle: true,
+        systemOverlayStyle: SystemUiOverlayStyle.light,
+        iconTheme: IconThemeData(color: goldColor),
+        titleTextStyle: TextStyle(
+          color: goldColor,
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+        backgroundColor: darkGrey,
+        selectedItemColor: goldColor,
+        unselectedItemColor: lightGrey,
+        type: BottomNavigationBarType.fixed,
+        elevation: 8,
+      ),
+      cardTheme: CardThemeData(
+        color: darkCard,
+        elevation: 4,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+      ),
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: goldColor,
+          foregroundColor: Colors.black,
+          elevation: 4,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+        ),
+      ),
+      inputDecorationTheme: InputDecorationTheme(
+        filled: true,
+        fillColor: grey,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide.none,
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide.none,
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: goldColor, width: 2),
+        ),
+        labelStyle: const TextStyle(color: lightGrey),
+        hintStyle: const TextStyle(color: lightGrey),
+      ),
+      textTheme: const TextTheme(
+        headlineLarge: TextStyle(
+          color: goldColor,
+          fontSize: 32,
+          fontWeight: FontWeight.bold,
+        ),
+        headlineMedium: TextStyle(
+          color: Colors.white,
+          fontSize: 24,
+          fontWeight: FontWeight.bold,
+        ),
+        titleLarge: TextStyle(
+          color: Colors.white,
+          fontSize: 20,
+          fontWeight: FontWeight.w600,
+        ),
+        bodyLarge: TextStyle(
+          color: Colors.white,
+          fontSize: 16,
+        ),
+        bodyMedium: TextStyle(
+          color: lightGrey,
+          fontSize: 14,
+        ),
+      ),
+    );
+  }
 
-  static ThemeData lightTheme = ThemeData(
-    brightness: Brightness.light,
-    primaryColor: goldColor,
-    scaffoldBackgroundColor: const Color(0xFFF5F5F5),
-    cardColor: Colors.white,
-    colorScheme: const ColorScheme.light(
-      primary: goldColor,
-      secondary: Colors.orange,
-      surface: Colors.white,
-    ),
-    textTheme: const TextTheme(
-      bodyLarge: TextStyle(color: Colors.black),
-      bodyMedium: TextStyle(color: Colors.black87),
-    ),
-    appBarTheme: const AppBarTheme(
-      backgroundColor: Colors.white,
-      foregroundColor: Colors.black,
-      elevation: 0,
-    ),
-  );
+  static ThemeData get lightTheme {
+    return ThemeData(
+      useMaterial3: true,
+      brightness: Brightness.light,
+      scaffoldBackgroundColor: Colors.white,
+      primaryColor: goldColor,
+      colorScheme: const ColorScheme.light(
+        primary: goldColor,
+        secondary: darkGold,
+        surface: Colors.white,
+        onPrimary: Colors.black,
+        onSecondary: Colors.black,
+        onSurface: Colors.black,
+      ),
+      appBarTheme: const AppBarTheme(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        centerTitle: true,
+        iconTheme: IconThemeData(color: goldColor),
+        titleTextStyle: TextStyle(
+          color: Colors.black,
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      cardTheme: CardThemeData(
+        color: Colors.white,
+        elevation: 4,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+      ),
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: goldColor,
+          foregroundColor: Colors.black,
+          elevation: 4,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+        ),
+      ),
+    );
+  }
 }
