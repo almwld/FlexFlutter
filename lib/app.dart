@@ -1,3 +1,5 @@
+import 'screens/referral_screen.dart';
+import 'screens/vip_store_screen.dart';
 import 'package:flutter/material.dart';
 import 'theme/app_theme.dart';
 import 'screens/login_screen.dart';
@@ -43,6 +45,8 @@ class FlexYemenApp extends StatelessWidget {
         '/security': (context) => const SecurityScreen(),
         '/auctions': (context) => const AuctionScreen(),
         '/merchant': (context) => const MerchantDashboard(),
+        '/vip_store': (context) => const VipStoreScreen(),
+        '/referral': (context) => const ReferralScreen(),
         '/tracking': (context) => const OrderTrackingScreen(),
         '/coupons': (context) => const CouponsScreen(), // مسار الكوبونات
       },
