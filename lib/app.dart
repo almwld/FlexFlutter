@@ -1,3 +1,4 @@
+import 'screens/splash_screen.dart';
 import 'screens/referral_screen.dart';
 import 'screens/vip_store_screen.dart';
 import 'package:flutter/material.dart';
@@ -32,8 +33,9 @@ class FlexYemenApp extends StatelessWidget {
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: ThemeMode.system, 
-      initialRoute: '/login',
+      initialRoute: '/',
       routes: {
+        '/': (context) => const SplashScreen(),
         '/login': (context) => const LoginScreen(),
         '/home': (context) => const HomeScreen(),
         '/profile': (context) => const ProfileScreen(),
