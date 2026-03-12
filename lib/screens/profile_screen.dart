@@ -7,41 +7,16 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('حسابي')),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            _buildHeader(),
-            _buildWalletCard(context),
-            const Divider(),
-            _buildMenuItem(Icons.security, 'الأمان والخصوصية', () => Navigator.pushNamed(context, '/security')),
-            _buildMenuItem(Icons.policy_outlined, 'سياسة الخصوصية', () => Navigator.pushNamed(context, '/privacy')),
-            _buildMenuItem(Icons.help_outline, 'المساعدة والدعم', () => Navigator.pushNamed(context, '/support')),
-            const SizedBox(height: 20),
-            TextButton(
-              onPressed: () => Navigator.pushReplacementNamed(context, '/login'),
-              child: const Text('تسجيل الخروج', style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold)),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildHeader() {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      child: Row(
+      appBar: AppBar(title: const Text("حسابي")),
+      body: ListView(
         children: [
-          const CircleAvatar(radius: 35, backgroundColor: AppTheme.goldColor, child: Icon(Icons.person, size: 35, color: Colors.black)),
-          const SizedBox(width: 15),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [
-              Text('مستخدم فلكس', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-              Text('77XXXXXXX', style: TextStyle(color: Colors.grey)),
-            ],
-          ),
+          _buildWalletCard(context),
+          _buildMenuTile(Icons.notifications, "الإشعارات"),
+          _buildMenuTile(Icons.security, "الأمان"),
+          _buildMenuTile(Icons.payment, "طرق الدفع"),
+          _buildMenuTile(Icons.help, "الدعم والمساعدة"),
+          _buildMenuTile(Icons.info, "عن التطبيق"),
+          _buildMenuTile(Icons.logout, "تسجيل الخروج", isRed: true),
         ],
       ),
     );
@@ -51,36 +26,21 @@ class ProfileScreen extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.all(15),
       padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: AppTheme.goldColor,
-        borderRadius: BorderRadius.circular(15),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      decoration: BoxDecoration(color: AppTheme.goldColor, borderRadius: BorderRadius.circular(15)),
+      child: const Column(
         children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [
-              Text('الرصيد الحالي', style: TextStyle(color: Colors.black54)),
-              Text('150,000 ريال', style: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold)),
-            ],
-          ),
-          ElevatedButton(
-            onPressed: () => Navigator.pushNamed(context, '/wallet'),
-            style: ElevatedButton.styleFrom(backgroundColor: Colors.black, foregroundColor: Colors.white),
-            child: const Text('المحفظة'),
-          )
+          Text("الرصيد المحفظة", style: TextStyle(color: Colors.black)),
+          Text("150,000 YR", style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.black)),
         ],
       ),
     );
   }
 
-  Widget _buildMenuItem(IconData icon, String title, VoidCallback onTap) {
+  Widget _buildMenuTile(IconData icon, String title, {bool isRed = false}) {
     return ListTile(
-      leading: Icon(icon, color: AppTheme.goldColor),
-      title: Text(title),
-      trailing: const Icon(Icons.arrow_forward_ios, size: 14),
-      onTap: onTap,
+      leading: Icon(icon, color: isRed ? Colors.red : AppTheme.goldColor),
+      title: Text(title, style: TextStyle(color: isRed ? Colors.red : null)),
+      trailing: const Icon(Icons.arrow_forward_ios, size: 16),
     );
   }
 }

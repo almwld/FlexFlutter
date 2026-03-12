@@ -28,7 +28,7 @@ jobs:
           rm -rf android/
           flutter create --project-name flex_yemen --platforms android .
           
-          # إعدادات الأندرويد مع توحيد إصدار Java إلى 17
+          # إعداد build.gradle وتحديث التوافقية
           cat << 'CONF' > android/app/build.gradle
           plugins {
               id "com.android.application"
@@ -56,12 +56,6 @@ jobs:
               kotlinOptions {
                   jvmTarget = '17'
               }
-
-              buildTypes {
-                  release {
-                      signingConfig signingConfigs.debug
-                  }
-              }
           }
 
           flutter {
@@ -69,19 +63,47 @@ jobs:
           }
           CONF
 
-          # تحديث محرك البناء والتوافق
-          sed -i 's/id "com.android.application" version ".*"/id "com.android.application" version "8.1.1"/' android/settings.gradle
-          sed -i 's/id "org.jetbrains.kotlin.android" version ".*"/id "org.jetbrains.kotlin.android" version "1.9.20"/' android/settings.gradle
-          sed -i 's/gradle-.*-all.zip/gradle-8.0-all.zip/' android/gradle/wrapper/gradle-wrapper.properties
+          # تحديث ملف الإعدادات لإصدارات Kotlin و Gradle الحديثة
+          cat << 'SETTINGS' > android/settings.gradle
+          pluginManagement {
+              def flutterSdkPath = {
+                  def properties = new Properties()
+                  file("local.properties").withInputStream { properties.load(it) }
+                  def flutterSdkPath = properties.getProperty("flutter.sdk")
+                  assert flutterSdkPath != null, "flutter.sdk not set in local.properties"
+                  return flutterSdkPath
+              }()
+
+              includeBuild("\$flutterSdkPath/packages/flutter_tools/gradle")
+
+              repositories {
+                  google()
+                  mavenCentral()
+                  gradlePluginPortal()
+              }
+          }
+
+          plugins {
+              id "dev.flutter.flutter-gradle-plugin" apply false
+              id "com.android.application" version "8.2.1" apply false
+              id "org.jetbrains.kotlin.android" version "2.1.0" apply false
+          }
+
+          include ":app"
+          SETTINGS
+
+          # تحديث Gradle Wrapper ليتوافق مع الإصدارات الجديدة
+          sed -i 's/gradle-.*-all.zip/gradle-8.2-all.zip/' android/gradle/wrapper/gradle-wrapper.properties
 
       - name: Build APK
         run: |
           flutter pub get
-          flutter pub run flutter_launcher_icons
+          # تشغيل الأيقونات فقط إذا كان الملف موجوداً
+          if [ -f "flutter_launcher_icons.yaml" ]; then flutter pub run flutter_launcher_icons; fi
           flutter build apk --release --no-tree-shake-icons
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: flex-yemen-release-apk
+          name: flex-yemen-final-apk
           path: build/app/outputs/flutter-apk/app-release.apk
