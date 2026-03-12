@@ -10,7 +10,8 @@ import 'screens/privacy_screen.dart';
 import 'screens/support_screen.dart';
 import 'screens/security_screen.dart';
 import 'screens/auction_screen.dart';
-import 'screens/merchant_dashboard.dart'; // استيراد لوحة التاجر
+import 'screens/merchant_dashboard.dart';
+import 'screens/order_tracking_screen.dart'; // استيراد التتبع
 
 class FlexYemenApp extends StatelessWidget {
   const FlexYemenApp({super.key});
@@ -35,7 +36,8 @@ class FlexYemenApp extends StatelessWidget {
         '/support': (context) => const SupportScreen(),
         '/security': (context) => const SecurityScreen(),
         '/auctions': (context) => const AuctionScreen(),
-        '/merchant': (context) => const MerchantDashboard(), // المسار الجديد
+        '/merchant': (context) => const MerchantDashboard(),
+        '/tracking': (context) => const OrderTrackingScreen(), // إضافة المسار
       },
     );
   }
