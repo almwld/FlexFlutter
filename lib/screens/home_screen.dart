@@ -1,3 +1,4 @@
+import '../widgets/search_filters.dart';
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
 import '../widgets/main_slider.dart';
@@ -12,7 +13,7 @@ class HomeScreen extends StatelessWidget {
         title: const Text('فلكس يمن', style: TextStyle(fontWeight: FontWeight.bold, letterSpacing: 1.2)),
         actions: [
           IconButton(icon: const Icon(Icons.notifications_none), onPressed: () {}),
-          IconButton(icon: const Icon(Icons.search), onPressed: () {}),
+          IconButton(icon: const Icon(Icons.tune), onPressed: () { showModalBottomSheet(context: context, isScrollControlled: true, shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(25))), builder: (context) => const SearchFilters()); }),
         ],
       ),
       body: SingleChildScrollView(
