@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'theme/app_theme.dart';
 import 'screens/splash_screen.dart';
 import 'screens/login_screen.dart';
-import 'screens/home_screen.dart';
-import 'screens/add_ad_screen.dart';
+import 'screens/main_parent_screen.dart';
+import 'screens/map_screen.dart'; // إضافة الخرائط
 
 class FlexYemenApp extends StatelessWidget {
   const FlexYemenApp({super.key});
@@ -13,15 +13,13 @@ class FlexYemenApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flex Yemen',
-      theme: AppTheme.lightTheme,
-      darkTheme: AppTheme.darkTheme,
-      themeMode: ThemeMode.system, // يتغير مع الهاتف تلقائياً
+      theme: AppTheme.darkTheme,
       initialRoute: '/',
       routes: {
         '/': (context) => const SplashScreen(),
+        '/main': (context) => const MainParentScreen(),
         '/login': (context) => const LoginScreen(),
-        '/home': (context) => const HomeScreen(),
-        '/add_ad': (context) => const AddAdScreen(),
+        '/maps': (context) => const MapScreen(),
       },
     );
   }

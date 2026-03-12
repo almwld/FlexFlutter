@@ -7,115 +7,131 @@ class WalletScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('محفظة فلكس'), centerTitle: true),
+      backgroundColor: const Color(0xFF121212),
+      appBar: AppBar(
+        title: const Text('محفظتي الرقمية', style: TextStyle(color: AppTheme.goldColor)),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        centerTitle: true,
+      ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            _buildBalanceCard(),
-            const SizedBox(height: 25),
-            _buildMainActions(),
+            const SizedBox(height: 20),
+            // عرض الأرصدة في بطاقات متحركة
+            SizedBox(
+              height: 200,
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                children: [
+                  _buildBalanceCard('الريال اليمني', '1,250,000', 'YER', Colors.redAccent),
+                  _buildBalanceCard('الريال السعودي', '4,500', 'SAR', Colors.green),
+                  _buildBalanceCard('الدولار الأمريكي', '1,200', 'USD', Colors.blue),
+                ],
+              ),
+            ),
+            
             const SizedBox(height: 30),
-            _buildSectionTitle('خدمات الدفع السريع'),
-            _buildServicesGrid(),
+            
+            // أزرار العمليات السريعة
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  _buildActionButton(Icons.add_card, 'إيداع'),
+                  _buildActionButton(Icons.send_rounded, 'تحويل'),
+                  _buildActionButton(Icons.history, 'السجل'),
+                ],
+              ),
+            ),
+
             const SizedBox(height: 30),
-            _buildSectionTitle('آخر العمليات'),
-            _buildTransactionList(),
+
+            // قائمة آخر العمليات
+            Container(
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.05),
+                borderRadius: const BorderRadius.only(topLeft: Radius.circular(30), topRight: Radius.circular(30)),
+                border: Border.all(color: Colors.white.withOpacity(0.1)),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  const Text('آخر العمليات', style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
+                  const SizedBox(height: 15),
+                  _buildTransactionItem('شراء عقار - صنعاء', '- 500,000 YER', Icons.home_work, Colors.red),
+                  _buildTransactionItem('إيداع نقدي', '+ 200 SAR', Icons.account_balance_wallet, Colors.green),
+                  _buildTransactionItem('بيع سيارة تويوتا', '+ 5,000 USD', Icons.directions_car, Colors.green),
+                ],
+              ),
+            ),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildBalanceCard() {
+  Widget _buildBalanceCard(String title, String amount, String currency, Color color) {
     return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(25),
+      width: 300,
+      margin: const EdgeInsets.only(right: 15),
+      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        gradient: const LinearGradient(colors: [AppTheme.goldColor, Color(0xFFB8860B)]),
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [BoxShadow(color: AppTheme.goldColor.withOpacity(0.3), blurRadius: 15)],
+        gradient: LinearGradient(
+          colors: [color.withOpacity(0.4), color.withOpacity(0.1)],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(25),
+        border: Border.all(color: Colors.white.withOpacity(0.2)),
       ),
       child: Column(
-        children: const [
-          Text('رصيدك المتاح', style: TextStyle(color: Colors.black54, fontWeight: FontWeight.bold)),
-          SizedBox(height: 10),
-          Text('450,000', style: TextStyle(color: Colors.black, fontSize: 35, fontWeight: FontWeight.bold)),
-          Text('ريال يمني', style: TextStyle(color: Colors.black87, fontSize: 14)),
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(title, style: const TextStyle(color: Colors.white70, fontSize: 16)),
+          const SizedBox(height: 10),
+          Row(
+            children: [
+              Text(amount, style: const TextStyle(color: Colors.white, fontSize: 32, fontWeight: FontWeight.bold)),
+              const SizedBox(width: 10),
+              Text(currency, style: const TextStyle(color: AppTheme.goldColor, fontSize: 18)),
+            ],
+          ),
+          const SizedBox(height: 20),
+          const Text('**** **** **** 4419', style: TextStyle(color: Colors.white38, letterSpacing: 2)),
         ],
       ),
     );
   }
 
-  Widget _buildMainActions() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: [
-        _actionCircle(Icons.add_card, 'إيداع'),
-        _actionCircle(Icons.account_balance_wallet, 'سحب'),
-        _actionCircle(Icons.swap_horizontal_circle, 'تحويل'),
-      ],
-    );
-  }
-
-  Widget _actionCircle(IconData icon, String label) {
+  Widget _buildActionButton(IconData icon, String label) {
     return Column(
       children: [
         Container(
           padding: const EdgeInsets.all(15),
-          decoration: BoxDecoration(color: AppTheme.goldColor.withOpacity(0.1), shape: BoxShape.circle),
-          child: Icon(icon, color: AppTheme.goldColor, size: 30),
+          decoration: BoxDecoration(
+            color: AppTheme.goldColor.withOpacity(0.1),
+            shape: BoxShape.circle,
+            border: Border.all(color: AppTheme.goldColor.withOpacity(0.5)),
+          ),
+          child: Icon(icon, color: AppTheme.goldColor),
         ),
         const SizedBox(height: 8),
-        Text(label, style: const TextStyle(fontWeight: FontWeight.bold)),
+        Text(label, style: const TextStyle(color: Colors.white, fontSize: 14)),
       ],
     );
   }
 
-  Widget _buildServicesGrid() {
-    final services = [
-      {'icon': Icons.phone_android, 'label': 'رصيد'},
-      {'icon': Icons.wifi, 'label': 'إنترنت'},
-      {'icon': Icons.lightbulb, 'label': 'كهرباء'},
-      {'icon': Icons.water_drop, 'label': 'مياه'},
-    ];
-    return GridView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 4, mainAxisSpacing: 10),
-      itemCount: services.length,
-      itemBuilder: (context, i) => Column(
-        children: [
-          Icon(services[i]['icon'] as IconData, color: Colors.grey),
-          const SizedBox(height: 5),
-          Text(services[i]['label'] as String, style: const TextStyle(fontSize: 12)),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildTransactionList() {
-    return ListView.separated(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      itemCount: 3,
-      separatorBuilder: (_, __) => const Divider(),
-      itemBuilder: (context, i) => ListTile(
-        leading: CircleAvatar(
-          backgroundColor: i == 1 ? Colors.red.withOpacity(0.1) : Colors.green.withOpacity(0.1),
-          child: Icon(i == 1 ? Icons.arrow_upward : Icons.arrow_downward, color: i == 1 ? Colors.red : Colors.green),
-        ),
-        title: Text(i == 1 ? 'شراء إعلان VIP' : 'إيداع من صرافة الكريمي'),
-        subtitle: const Text('2026-03-12'),
-        trailing: Text(i == 1 ? '-2000' : '+5000', style: const TextStyle(fontWeight: FontWeight.bold)),
-      ),
-    );
-  }
-
-  Widget _buildSectionTitle(String title) {
-    return Align(
-      alignment: Alignment.centerRight,
-      child: Text(title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppTheme.goldColor)),
+  Widget _buildTransactionItem(String title, String amount, IconData icon, Color color) {
+    return ListTile(
+      leading: Icon(icon, color: Colors.white24),
+      title: Text(title, style: const TextStyle(color: Colors.white, fontSize: 14)),
+      trailing: Text(amount, style: TextStyle(color: color, fontWeight: FontWeight.bold)),
+      contentPadding: EdgeInsets.zero,
     );
   }
 }
