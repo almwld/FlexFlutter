@@ -3,7 +3,6 @@ name: Flex Yemen Build APK
 on:
   push:
     branches: [ main, master ]
-  workflow_dispatch: # إضافة إمكانية التشغيل اليدوي من الموقع
 
 jobs:
   build:
@@ -15,7 +14,7 @@ jobs:
       - name: Set up Java
         uses: actions/setup-java@v4
         with:
-          distribution: 'temurin' # تغيير التوزيعة لضمان التحميل
+          distribution: 'temurin'
           java-version: '17'
 
       - name: Set up Flutter
@@ -24,28 +23,53 @@ jobs:
           flutter-version: '3.19.0'
           channel: 'stable'
 
-      - name: Repair and Force SDK
+      - name: Strategic Android Repair
         run: |
           rm -rf android/
           flutter create --project-name flex_yemen --platforms android .
           
-          # فرض الإعدادات التي حلت مشاكل الخرائط والإشعارات سابقاً
-          sed -i 's/minSdk = .*/minSdk = 21/' android/app/build.gradle
-          sed -i 's/targetSdk = .*/targetSdk = 34/' android/app/build.gradle
-          sed -i 's/compileSdk = .*/compileSdk = 34/' android/app/build.gradle
-          
-          # تحديث محرك البناء
+          # 1. إنشاء ملف إعدادات خارجي لا يمكن لـ Gradle تجاهله
+          cat << 'CONF' > android/app/build.gradle
+          plugins {
+              id "com.android.application"
+              id "kotlin-android"
+              id "dev.flutter.flutter-gradle-plugin"
+          }
+
+          android {
+              namespace "com.example.flex_yemen"
+              compileSdk 34
+
+              defaultConfig {
+                  applicationId "com.example.flex_yemen"
+                  minSdk 21
+                  targetSdk 34
+                  versionCode 1
+                  versionName "1.0.0"
+              }
+
+              buildTypes {
+                  release {
+                      signingConfig signingConfigs.debug
+                  }
+              }
+          }
+
+          flutter {
+              source '../..'
+          }
+          CONF
+
+          # 2. تحديث المحرك الرئيسي
           sed -i 's/id "com.android.application" version ".*"/id "com.android.application" version "8.1.1"/' android/settings.gradle
+          sed -i 's/id "org.jetbrains.kotlin.android" version ".*"/id "org.jetbrains.kotlin.android" version "1.9.20"/' android/settings.gradle
           sed -i 's/gradle-.*-all.zip/gradle-8.0-all.zip/' android/gradle/wrapper/gradle-wrapper.properties
 
-      - name: Install dependencies
-        run: flutter pub get
-
-      - name: Generate App Icons
-        run: flutter pub run flutter_launcher_icons
-
       - name: Build APK
-        run: flutter build apk --release --no-tree-shake-icons
+        run: |
+          flutter pub get
+          flutter pub run flutter_launcher_icons
+          flutter build apk --release --no-tree-shake-icons
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
