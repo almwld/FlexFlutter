@@ -23,23 +23,24 @@ jobs:
           flutter-version: '3.19.0'
           channel: 'stable'
 
-      - name: Repair and Upgrade Android Structure
+      - name: Force Build Configuration
         run: |
           rm -rf android/
           flutter create --project-name flex_yemen --platforms android .
           
-          # 1. تحديث إعدادات Gradle و Kotlin في settings.gradle
-          sed -i 's/id "com.android.application" version ".*"/id "com.android.application" version "8.1.1"/' android/settings.gradle
-          sed -i 's/id "org.jetbrains.kotlin.android" version ".*"/id "org.jetbrains.kotlin.android" version "1.9.20"/' android/settings.gradle
-          sed -i 's/gradle-.*-all.zip/gradle-8.0-all.zip/' android/gradle/wrapper/gradle-wrapper.properties
+          # حقن القيم في local.properties (هذه أقوى طريقة لفرض الإصدارات)
+          echo "flutter.minSdkVersion=20" >> android/local.properties
+          echo "flutter.targetSdkVersion=34" >> android/local.properties
+          echo "flutter.compileSdkVersion=34" >> android/local.properties
           
-          # 2. تحديث الـ SDK داخل app/build.gradle (استخدام بحث مرن عن الكلمات المفتاحية)
-          # استبدال أي سطر يحتوي على compileSdk بقيمة 34
-          sed -i 's/compileSdk .*/compileSdk = 34/' android/app/build.gradle
-          # استبدال أي سطر يحتوي على minSdkVersion بقيمة 20
-          sed -i 's/minSdk .*/minSdk = 20/' android/app/build.gradle
-          # استبدال أي سطر يحتوي على targetSdk بقيمة 34
-          sed -i 's/targetSdk .*/targetSdk = 34/' android/app/build.gradle
+          # تعديل ملف build.gradle ليقرأ من local.properties
+          sed -i 's/minSdk = .*/minSdk = localProperties.getProperty("flutter.minSdkVersion").toInteger()/' android/app/build.gradle
+          sed -i 's/targetSdk = .*/targetSdk = localProperties.getProperty("flutter.targetSdkVersion").toInteger()/' android/app/build.gradle
+          sed -i 's/compileSdk = .*/compileSdk = localProperties.getProperty("flutter.compileSdkVersion").toInteger()/' android/app/build.gradle
+
+          # تحديث إصدارات Gradle الأساسية
+          sed -i 's/id "com.android.application" version ".*"/id "com.android.application" version "8.1.1"/' android/settings.gradle
+          sed -i 's/gradle-.*-all.zip/gradle-8.0-all.zip/' android/gradle/wrapper/gradle-wrapper.properties
 
       - name: Install dependencies
         run: flutter pub get
