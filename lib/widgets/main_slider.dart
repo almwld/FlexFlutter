@@ -1,49 +1,59 @@
 import 'package:flutter/material.dart';
-import 'package:carousel_slider/carousel_slider.dart';
-import '../theme/app_theme.dart';
+import 'dart:async';
 
-class MainSlider extends StatelessWidget {
+class MainSlider extends StatefulWidget {
   const MainSlider({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final List<Map<String, dynamic>> items = [
-      {'t': 'إعلانات تجار حصرية', 'i': Icons.business, 'c': Colors.blue},
-      {'t': 'عروض VIP المميزة', 'i': Icons.stars, 'c': Colors.amber},
-      {'t': 'أفضل مطاعم اليمن', 'i': Icons.restaurant, 'c': Colors.orange},
-      {'t': 'مزادات (سيارات وعقارات)', 'i': Icons.gavel, 'c': Colors.red},
-      {'t': 'أخبار فلكس يمن', 'i': Icons.campaign, 'c': AppTheme.goldColor},
-    ];
+  State<MainSlider> createState() => _MainSliderState();
+}
 
-    return CarouselSlider(
-      options: CarouselOptions(
-        height: 180,
-        autoPlay: true,
-        enlargeCenterPage: true,
-        autoPlayInterval: const Duration(seconds: 4),
-      ),
-      items: items.map((item) {
-        return Container(
-          width: MediaQuery.of(context).size.width,
-          margin: const EdgeInsets.symmetric(horizontal: 5.0),
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [item['c'], Colors.black.withOpacity(0.7)],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
+class _MainSliderState extends State<MainSlider> {
+  final PageController _controller = PageController();
+  int _currentPage = 0;
+  final List<Map<String, String>> slides = [
+    {'title': 'إعلانات حصرية للتجار', 'color': '0xFFD4AF37'},
+    {'title': 'عروض VIP الخاصة', 'color': '0xFF000000'},
+    {'title': 'أفضل المطاعم في اليمن', 'color': '0xFFE74C3C'},
+    {'title': 'المزادات: عقارات وسيارات وجنابي', 'color': '0xFF2C3E50'},
+    {'title': 'أخبار منصة فلكس يمن', 'color': '0xFF2980B9'},
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    Timer.periodic(const Duration(seconds: 5), (Timer timer) {
+      if (_currentPage < 4) {
+        _currentPage++;
+      } else {
+        _currentPage = 0;
+      }
+      if (_controller.hasClients) {
+        _controller.animateToPage(_currentPage, duration: const Duration(milliseconds: 500), curve: Curves.easeIn);
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 180,
+      child: PageView.builder(
+        controller: _controller,
+        itemCount: slides.length,
+        itemBuilder: (context, index) {
+          return Container(
+            margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(15),
+              gradient: LinearGradient(colors: [Color(int.parse(slides[index]['color']!)), Colors.orange]),
             ),
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(item['i'], size: 50, color: Colors.white),
-              const SizedBox(height: 10),
-              Text(item['t'], style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
-            ],
-          ),
-        );
-      }).toList(),
+            child: Center(
+              child: Text(slides[index]['title']!, style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
+            ),
+          );
+        },
+      ),
     );
   }
 }
