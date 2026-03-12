@@ -11,6 +11,16 @@ dependencies:
     sdk: flutter
   cupertino_icons: ^1.0.6
   flutter_svg: ^2.0.10+1
+  supabase_flutter: ^2.3.4
+  google_maps_flutter: ^2.5.0
+  geolocator: ^10.1.0
+  geocoding: ^2.1.1
+  http: ^1.1.0
+  shared_preferences: ^2.2.2
+  image_picker: ^1.0.7
+  url_launcher: ^6.2.4
+  intl: ^0.19.0
+  shimmer: ^3.0.0
 
 dev_dependencies:
   flutter_test:
@@ -19,3 +29,12 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  fonts:
+    - family: Cairo
+      fonts:
+        - asset: assets/fonts/Cairo-Regular.ttf
+        - asset: assets/fonts/Cairo-Bold.ttf
+          weight: 700
+  assets:
+    - assets/images/
+    - assets/icons/
